@@ -9,13 +9,13 @@ pipeline {
                     //This image parameter (of the agent section’s docker parameter) downloads the python:2-alpine
                     //Docker image and runs this image as a separate container. The Python container becomes
                     //the agent that Jenkins uses to run the Build stage of your Pipeline project.
-                    image 'python:3'
+                    image 'python:2-alpine'
                 }
             }
             steps {
                 //This sh step runs the Python command to compile your application and
                 //its calc library into byte code files, which are placed into the sources workspace directory
-                sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+                sh 'python -m py_compile sources/add2vals.py sources/calc.py sources/classes/*'
                 //This stash step saves the Python source code and compiled byte code files from the sources
                 //workspace directory for use in later stages.
                 stash(name: 'compiled-results', includes: 'sources/*.py*')
@@ -35,7 +35,7 @@ pipeline {
                 //unit tests (defined in test_calc.py) on the "calc" library’s add2 function.
                 //The --junit-xml test-reports/results.xml option makes py.test generate a JUnit XML report,
                 //which is saved to test-reports/results.xml
-                sh 'pytest --verbose --junit-xml test-reports/results.xml --html=res.html sources/test_calc.py'
+                sh 'pytest --verbose --junit-xml test-reports/results.xml sources/test_lock.py'
             }
             post {
                 always {
