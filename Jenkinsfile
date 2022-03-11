@@ -11,6 +11,9 @@ pipeline {
                     //the agent that Jenkins uses to run the Build stage of your Pipeline project.
                     image 'python:2-alpine'
                 }
+                steps{
+                    sh 'pip install pytest-html'
+                }
             }
             steps {
                 //This sh step runs the Python command to compile your application and
